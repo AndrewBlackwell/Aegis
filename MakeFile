@@ -1,0 +1,24 @@
+NVCC = nvcc
+FLAGS = -O3 -w -arch=sm_61 -rdc=true -std=c++11 -I./library
+OBJFILES = obj/Main.o \
+			obj/lodepng.o
+
+.PHONY: all clean 
+
+all: obj aegis
+
+aegis: $(OBJFILES)
+	$(NVCC) $(FLAGS) $^ -o $@ 
+
+obj/%.o: %.cu
+	$(NVCC) $(FLAGS) -c -o $@ $< -lcudadevrt
+
+obj/%.o: library/%.cpp
+	$(NVCC) $(FLAGS) -c -o $@ $<
+
+obj:
+	mkdir -p obj
+
+clean:
+	$(RM) obj/*.o aegis
+	$(RM) ./*.png

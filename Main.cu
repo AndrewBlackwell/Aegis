@@ -1,14 +1,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "extern/lodepng.h"
-#include "extern/stb_image.h"
-#include "include/Util.cuh"
-#include "include/Camera.cuh"
-#include "include/Sphere.cuh"
-#include "include/HittableList.cuh"
-#include "include/Material.cuh"
-#include "include/WorldGen.cuh"
-#include "include/Quad.cuh"
+#include "library/lodepng.h"
+#include "library/stb_image.h"
+#include "headers/Util.cuh"
+#include "headers/Camera.cuh"
+#include "headers/Sphere.cuh"
+#include "headers/HittableList.cuh"
+#include "headers/Material.cuh"
+#include "headers/WorldGen.cuh"
+#include "headers/Quad.cuh"
 
 #include <iostream>
 #include <thread>
@@ -291,7 +291,7 @@ int main()
     case SCENE_OPTIONS::EARTH:
     {
         // image texture buffer
-        const char *image_paths[] = {"./images/earthmap.jpg"};
+        const char *image_paths[] = {"./textures/earthmap.jpg"};
         num_textures = 1;
         loadImageTextures(image_paths, num_textures, gpu_image_data, gpu_tex_widths, gpu_tex_heights);
 
@@ -313,7 +313,7 @@ int main()
     case SCENE_OPTIONS::FINAL_SCENE:
     {
         // image texture buffer
-        const char *image_paths[] = {"./images/earthmap.jpg", "./images/jupitermap.jpg"};
+        const char *image_paths[] = {"./textures/earthmap.jpg", "./textures/jupitermap.jpg"};
         num_textures = 2;
         loadImageTextures(image_paths, num_textures, gpu_image_data, gpu_tex_widths, gpu_tex_heights);
 
