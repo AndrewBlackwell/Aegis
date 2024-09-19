@@ -1,74 +1,67 @@
-# Work In Progress -- Come Back Later
-
----
-
 # Aegis: Ray Tracing Project (CUDA)
 
-**Version 1** of Aegis is a CUDA-based port of **Helios**, described in _Ray Tracing in One Weekend_ by Peter Shirley. This version lays the foundation of the ray tracing engine, focusing on generating a simple image using CUDA parallelism, creating basic geometric shapes, and implementing surface shading with a camera that sends rays into the scene.
+Aegis is an experimental ray tracing engine implemented in [CUDA](https://blogs.nvidia.com/blog/what-is-cuda-2/), designed to explore fundamental concepts of [GPU-accelerated](https://www.youtube.com/watch?v=-P28LKWTzrI) rendering. The project combines essential ray tracing techniques with the parallel computing power of modern GPUs, serving as a hands-on exploration of [Monte Carlo](https://en.wikipedia.org/wiki/Monte_Carlo_method) integration, light transport, and scene management. It aims to provide a solid foundation for understanding core principles of ray tracing and CUDA programming, while delivering visually compelling results.
 
-- **PPM Image Format**: The output image is stored in the PPM format, a simple text-based image format that is easy to work with and visualize.
-- **Color Utility Functions**: A utility class for handling RGB color values, vector arithmetic, and color manipulations.
-- **Simple Camera**: A basic implementation of a camera that sends rays through each pixel.
-- **Background Rendering**: A gradient background color that is used when a ray does not hit any objects.
-- **Ray-Sphere Intersection**: The fundamental geometric operation to calculate if and where a ray intersects with a sphere.
-- **Shading with Surface Normals**: Computes shading based on the surface normal at the intersection point, giving the sphere a three-dimensional appearance.
-- **Abstraction for Hittable Objects**: Generalizes objects that can be "hit" by a ray (starting with spheres).
-- **Multiple Objects**: Enables rendering of more than one object in the scene.
-- **RNG Anti-Aliasing**: Used to sample rays randomly within each pixel, introducing antialiasing to smooth jagged edges.
-- **Multiple Samples per Pixel**: Each pixel's color is determined by averaging several ray samples, resulting in smoother images.
+## Key Features
 
----
+- **CUDA-Accelerated Rendering**: Leverages the parallel processing capabilities of GPUs to accelerate ray tracing, providing an accessible entry point into high-performance computing.
+- **Basic Monte Carlo Integration**: Implements Monte Carlo methods for light sampling and scattering, laying the groundwork for understanding more advanced rendering techniques.
+- **Fundamental Light Scattering Models**: Includes basic scattering models and importance sampling, enabling exploration of how light interacts with surfaces and volumes.
+- **Dynamic Scene Capabilities**: Supports motion blur and defocus blur to illustrate the effects of camera and object motion on rendering.
+- **Optimized Scene Traversal**: Uses [Bounding Volume Hierarchies](https://en.wikipedia.org/wiki/Bounding_volume_hierarchy) (BVH) to demonstrate efficient spatial partitioning, reducing computation time for ray-object intersections.
+- **Texture and Material Basics**: Provides support for simple texture mapping and basic material properties, offering a practical way to learn about shading and surface details.
+- **Extensible Framework**: A modular structure that allows for easy experimentation with different rendering techniques and scene configurations, making it ideal for learning and expanding on core concepts.
 
-**Version 2** of Aegis builds upon the core of **Helios** by adding advanced features like motion blur, bounding volume hierarchies, texture mapping, and more. This version further optimizes rendering through CUDA parallelism and introduces essential techniques for more complex scenes.
-
-- **Motion Blur**: Adds support for simulating motion blur by introducing space-time ray tracing and managing time in the scene.
-- **Bounding Volume Hierarchies (BVH)**: Implements axis-aligned bounding boxes (AABBs) and hierarchies of bounding volumes to optimize the ray-object intersection process, resulting in faster rendering.
-- **Texture Mapping**: Introduces constant color and checker textures, with support for texture coordinates on spheres, enabling more detailed object surfaces.
-- **Perlin Noise**: Generates procedural textures with Perlin noise, improving texture realism through turbulence and frequency adjustments.
-- **Quadrilaterals**: Adds ray-plane intersection, defining quadrilaterals, and testing UV coordinates for intersection within the surface.
-- **Lights**: Implements emissive materials and background color handling, allowing objects to be treated as light sources. A simple Cornell Box setup is included.
-- **Instances**: Introduces instance translation and rotation, enabling reusable transformations on objects in the scene.
-- **Volumes**: Adds constant-density mediums to simulate smoke and fog, enabling realistic volumetric effects in scenes like a Cornell Box filled with fog.
-
----
-
-**Version 3** of Aegis expands the ray tracing engine with Monte Carlo techniques for more realistic light interactions and sampling, adding sophisticated handling of light scattering, importance sampling, and direct light sampling.
-
-- **Monte Carlo Estimation**: Implements a basic Monte Carlo method for estimating values, including Pi, with convergence tests and stratified (jittered) sampling for improved accuracy.
-- **Monte Carlo Integration**: Extends the Monte Carlo method to integrate one-dimensional functions and approximate distributions with importance sampling, improving sampling efficiency.
-- **Light Scattering**: Simulates realistic light scattering using albedo and scattering PDFs, ensuring accurate distribution of light within the scene.
-- **Importance Sampling**: Incorporates importance sampling to better handle complex lighting scenarios, revisiting the Cornell Box setup to test the integration with random hemispherical sampling.
-- **Random Direction Generation**: Introduces random direction sampling relative to axes, including uniform and cosine-weighted sampling of hemispheres, useful for light and reflection simulations.
-- **Orthonormal Bases**: Implements an orthonormal basis (ONB) class for transforming between coordinate systems, allowing for flexible manipulation of object and light orientations.
-- **Direct Light Sampling**: Directly samples light sources, calculating PDFs for lights and using unidirectional light for efficient rendering.
-- **Mixture Densities**: Adds mixture PDFs, allowing sampling from a combination of multiple densities for more accurate ray-object interactions.
-- **PDF Management and Cleanup**: Refines PDF handling for both diffuse and specular materials, integrates PDF functions into hittable lists, and includes optimizations to reduce visual artifacts like surface acne.
-
-## Getting Started
-
-### Prerequisites
-
-- CUDA Toolkit installed
-- C++17 or later
-- CMake 3.14+
-- A GPU that supports CUDA
-
-### Compilation and Running
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo/aegis-cuda.git
-   ```
-2. Build the project:
-   ```bash
-   cmake -B build
-   cmake --build build
-   ```
-3. Run the executable:
-   ```bash
-   build/aegis > output.ppm
-   ```
+For more information on the development history and features of previous versions, please refer to the [version history here](docs/VERSION_HISTORY.md).
 
 ## Performance
 
-- This version uses CUDA to parallelize the ray tracing process, where each GPU thread is responsible for computing the color of one pixel. This drastically reduces rendering time compared to a CPU implementation.
+| Hardware Configuration         | Implementation | Technical Specifications                                                                                                                                              | Render Time           | Image                                |
+| ------------------------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------------------------------------ |
+| **MacBook Air M2 (2023)**      | C++ (Helios)   | **CPU:** 8-core Apple M2 (4x Performance, 4x Efficiency) <br> **GPU:** 10-core Apple M2 <br> **RAM:** 16 GB Unified <br> **OS:** macOS 13                             | 7 hours 32 minutes    | ![CPU Image](images/book1_final.png) |
+| **Google Cloud (NVIDIA T4)**   | CUDA (Aegis)   | **GPU:** NVIDIA T4 <br> **CUDA Cores:** 2560 <br> **VRAM:** 16 GB GDDR6 <br> **Compute Capability:** 7.5 <br> **Driver:** CUDA 11.2                                   | 46 minutes 22 seconds | ![GPU Image](images/book1_final.png) |
+| **Google Cloud (NVIDIA V100)** | CUDA (Aegis)   | **GPU:** NVIDIA Tesla V100 <br> **CUDA Cores:** 5120 <br> **Tensor Cores:** 640 <br> **VRAM:** 32 GB HBM2 <br> **Compute Capability:** 7.0 <br> **Driver:** CUDA 11.2 | 15 minutes 47 seconds | ![GPU Image](images/book1_final.png) |
+| **Google Cloud (NVIDIA A100)** | CUDA (Aegis)   | **GPU:** NVIDIA A100 <br> **CUDA Cores:** 6912 <br> **Tensor Cores:** 432 <br> **VRAM:** 40 GB HBM2 <br> **Compute Capability:** 8.0 <br> **Driver:** CUDA 11.4       | 5 minutes 2 seconds   | ![GPU Image](images/book1_final.png) |
+
+### Speedup Analysis
+
+1. **MacBook Air M2 (2023) vs. Google Cloud (NVIDIA T4)**:
+
+   - Speedup Factor: $\frac{7 \text{ hours } 32 \text{ minutes}}{46 \text{ minutes } 22 \text{ seconds}} \approx 9.8$
+   - The NVIDIA T4 offers a speedup of nearly 10x, leveraging its 2560 CUDA cores to significantly outperform the CPU-based implementation.
+
+2. **MacBook Air M2 (2023) vs. Google Cloud (NVIDIA V100)**:
+
+   - Speedup Factor: $\frac{7 \text{ hours } 32 \text{ minutes}}{15 \text{ minutes } 47 \text{ seconds}} \approx 28.6$
+   - The V100 achieves a 28.6x speedup, demonstrating its capability to handle intensive computations with its powerful 5120 CUDA cores and high-bandwidth memory.
+
+3. **MacBook Air M2 (2023) vs. Google Cloud (NVIDIA A100)**:
+   - Speedup Factor: $\frac{7 \text{ hours } 32 \text{ minutes}}{5 \text{ minutes } 2 \text{ seconds}} \approx 89.8$
+   - The A100 provides an impressive 89.8x speedup, showcasing the advantages of its 6912 CUDA cores and advanced architecture for complex rendering tasks.
+
+## Gallery
+
+Explore some of the additional renders created using Aegis:
+
+| Render                  | Description                                                                          | Image                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| **Anti-Aliasing**       | Demonstrates the effect of anti-aliasing on sharp edges.                             | ![Anti Aliasing](images/anti_alliasing.png)            |
+| **Reflect and Refract** | Demonstrates reflection and refraction effects with a transparent object.            | ![Reflect and Refract](images/reflect_and_refract.png) |
+| **Book 1 Cover**        | Final render for Version 1 setup.                                                    | ![Book 1 Alt](images/book1_final_alt.png)              |
+| **Book 2 Cover**        | Final render showcasing features from Version 2, including textures and motion blur. | ![Book 2 Final](images/book2_final_optimized.png)      |
+| **Cornell Box**         | A Cornell Box with a glass sphere and mirror.                                        | ![Cornell Sphere](images/cornell_sphere+mirror.png)    |
+
+## Acknowledgements
+
+This project was heavily influenced by the _Ray Tracing_ series by **Peter Shirley**, which provided the foundational knowledge and framework for building Aegis. The books in this series—_Ray Tracing in One Weekend_, _Ray Tracing: The Next Week_, and _Ray Tracing: The Rest of Your Life_—are excellent resources for anyone interested in learning about the fundamentals of ray tracing.
+
+### Additional Resources
+
+- **NVIDIA Developer Blog**: [Accelerated Ray Tracing in One Weekend in CUDA](https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/)
+- **PBRT (Physically Based Rendering)** by Matt Pharr, Wenzel Jakob, and Greg Humphreys: An in-depth guide to advanced rendering techniques. [Book Website](http://www.pbrt.org/)
+- **"An Efficient and Physically Realistic Lighting Model for Computer Graphics"** by Turner Whitted: The original paper introducing recursive ray tracing. [Paper Link](https://dl.acm.org/doi/10.1145/358876.358881)
+- **"A Survey of Monte Carlo Methods for Light Transport Simulation in Computer Graphics"** by Kelemen et al.: Comprehensive overview of Monte Carlo methods used in rendering. [Paper Link](https://link.springer.com/chapter/10.1007/978-3-540-29945-7_23)
+- **"Ray Tracing Gems"** by Eric Haines and Tomas Akenine-Möller: A collection of state-of-the-art ray tracing techniques. [Book Website](http://www.realtimerendering.com/raytracinggems/)
+- **CUDA Programming Guide** by NVIDIA: Essential reading for understanding CUDA's parallel programming model. [Documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html)
+
+These resources have been invaluable in guiding the development of Aegis, and we highly recommend them to anyone looking to deepen their understanding of ray tracing and GPU programming.
