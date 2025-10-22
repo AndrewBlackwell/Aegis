@@ -1,19 +1,3 @@
-# Aegis: Ray Tracing Project (CUDA)
-
-Aegis is an experimental ray tracing engine implemented in [CUDA](https://blogs.nvidia.com/blog/what-is-cuda-2/), designed to explore fundamental concepts of [GPU-accelerated](https://www.youtube.com/watch?v=-P28LKWTzrI) rendering. The project combines essential ray tracing techniques with the parallel computing power of modern GPUs, serving as a hands-on exploration of [Monte Carlo](https://en.wikipedia.org/wiki/Monte_Carlo_method) integration, light transport, and scene management. It aims to provide a solid foundation for understanding core principles of ray tracing and CUDA programming, while delivering visually compelling results.
-
-## Key Features
-
-- **CUDA-Accelerated Rendering**: Leverages the parallel processing capabilities of GPUs to accelerate ray tracing, providing an accessible entry point into high-performance computing.
-- **Basic Monte Carlo Integration**: Implements Monte Carlo methods for light sampling and scattering, laying the groundwork for understanding more advanced rendering techniques.
-- **Fundamental Light Scattering Models**: Includes basic scattering models and importance sampling, enabling exploration of how light interacts with surfaces and volumes.
-- **Dynamic Scene Capabilities**: Supports motion blur and defocus blur to illustrate the effects of camera and object motion on rendering.
-- **Optimized Scene Traversal**: Uses [Bounding Volume Hierarchies](https://en.wikipedia.org/wiki/Bounding_volume_hierarchy) (BVH) to demonstrate efficient spatial partitioning, reducing computation time for ray-object intersections.
-- **Texture and Material Basics**: Provides support for simple texture mapping and basic material properties, offering a practical way to learn about shading and surface details.
-- **Extensible Framework**: A modular structure that allows for easy experimentation with different rendering techniques and scene configurations, making it ideal for learning and expanding on core concepts.
-
-For more information on the development history and features of previous versions, please refer to the [version history here](docs/VERSION_HISTORY.md).
-
 ## Performance
 
 | Hardware Configuration         | Implementation | Technical Specifications                                                                                                                                              | Render Time           | Image                                |
